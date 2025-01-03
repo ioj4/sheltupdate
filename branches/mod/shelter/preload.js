@@ -48,26 +48,14 @@ ipcRenderer.invoke("SHELTER_BUNDLE_FETCH").then((bundle) => {
 
 let branches = {};
 
-ipcRenderer.invoke("SHELTER_ENDPOINT_GET").then(endpoint => {
-	fetch(`${endpoint}/sheltupdate_branches`)
-	.then((r) => r.json())
-	.then(
-		(branches_raw) =>
-			(branches = Object.fromEntries(
-				branches_raw.map((branch) => [
-					branch.name,
-					{ ...branch, name: branch.displayName, desc: branch.description },
-				]),
-			)),
-	);
-})
+const fetchAvailableBranches = () => ipcRenderer.invoke("SHELTER_AVAILABLE_BRANCHES");
 
 const readBranches = () => ipcRenderer.invoke("SHELTER_BRANCH_GET");
 
 const setBranches = (branches) => ipcRenderer.invoke("SHELTER_BRANCH_SET", branches);
 
 contextBridge.exposeInMainWorld("SheltupdateNative", {
-	getAllowedBranches: () => Promise.resolve(branches),
+	getAllowedBranches: fetchAvailableBranches,
 	getCurrentBranches: readBranches,
 
 	setBranches: async (br) => {

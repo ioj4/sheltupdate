@@ -8,7 +8,6 @@ const { EOL } = require("os");
 const logger = new Proxy(console, {
 	get: (target, key) =>
 		function (...args) {
-			//logFile?.write(`[${new Date().toISOString()}] [${key}] ${args.join(" ")}${EOL}`);
 			return target[key].apply(console, ["[shelter]", ...args]);
 		},
 });
@@ -127,7 +126,23 @@ Module.prototype.require = function (path) {
 
 		const endpoint = getEndpoint();
 
-		electron.ipcMain.handle("SHELTER_ENDPOINT_GET", () => endpoint);
+
+
+		electron.ipcMain.handle("SHELTER_AVAILABLE_BRANCHES", () => {
+			return new Promise(res => {
+				fetch(`${endpoint}/sheltupdate_branches`)
+				.then((r) => r.json())
+				.then(
+					(branches_raw) =>
+						res(Object.fromEntries(
+							branches_raw.map((branch) => [
+								branch.name,
+								{ ...branch, name: branch.displayName, desc: branch.description },
+							]),
+						)),
+				);
+			})
+		});
 
 
 		electron.ipcMain.handle("SHELTER_BRANCH_GET", () => {
