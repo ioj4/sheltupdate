@@ -108,6 +108,8 @@ Module.prototype.require = function (path) {
 		settingsApi?.store; // OpenAsar
 
 	if (settingsApi) {
+		const re = /(https?:\/\/.+)\/([a-zA-Z0-9_+-]+)/;
+
 		const getEndpoint = () => {
 			const ue1 = settingsApi.get("UPDATE_ENDPOINT");
 			const ue2 = settingsApi.get("NEW_UPDATE_ENDPOINT");
@@ -124,9 +126,6 @@ Module.prototype.require = function (path) {
 		}
 
 		const endpoint = getEndpoint();
-
-
-		const re = /(https?:\/\/.+)\/([a-zA-Z0-9_+-]+)/
 
 		electron.ipcMain.handle("SHELTER_ENDPOINT_GET", () => endpoint);
 

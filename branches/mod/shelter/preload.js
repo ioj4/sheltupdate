@@ -48,9 +48,8 @@ ipcRenderer.invoke("SHELTER_BUNDLE_FETCH").then((bundle) => {
 
 let branches = {};
 
-const endpoint = ipcRenderer.invoke("SHELTER_ENDPOINT_GET");
-
-fetch(`${endpoint}/sheltupdate_branches`)
+ipcRenderer.invoke("SHELTER_ENDPOINT_GET").then(endpoint => {
+	fetch(`${endpoint}/sheltupdate_branches`)
 	.then((r) => r.json())
 	.then(
 		(branches_raw) =>
@@ -61,6 +60,7 @@ fetch(`${endpoint}/sheltupdate_branches`)
 				]),
 			)),
 	);
+})
 
 const readBranches = () => ipcRenderer.invoke("SHELTER_BRANCH_GET");
 
