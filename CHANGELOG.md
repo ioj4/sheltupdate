@@ -1,3 +1,6 @@
+## r20
+ - test build with qemu
+
 ## r19
  - add armv8
 
