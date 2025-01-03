@@ -48,7 +48,9 @@ ipcRenderer.invoke("SHELTER_BUNDLE_FETCH").then((bundle) => {
 
 let branches = {};
 
-fetch("https://inject.shelter.uwu.network/sheltupdate_branches")
+const endpoint = ipcRenderer.invoke("SHELTER_ENDPOINT_GET");
+
+fetch(`${endpoint}/sheltupdate_branches`)
 	.then((r) => r.json())
 	.then(
 		(branches_raw) =>

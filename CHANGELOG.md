@@ -1,3 +1,6 @@
+## r23
+ - self hosted sheltupdate support
+
 ## r22
  - another test build
 
