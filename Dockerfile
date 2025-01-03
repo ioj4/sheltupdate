@@ -1,5 +1,5 @@
 # using two containers means we don't have to upload a docker layer containing pnpm, so it should be smaller.
-FROM node:23-alpine AS pnpm-container
+FROM node:18-alpine AS pnpm-container
 
 RUN npm i -g pnpm
 
