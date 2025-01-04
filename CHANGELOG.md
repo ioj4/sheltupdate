@@ -1,3 +1,6 @@
+## r29
+ - improve bundle fetching
+
 ## r28
  - wait for shelter bundle before starting the app
 

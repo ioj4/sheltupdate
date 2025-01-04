@@ -20,13 +20,17 @@ const remoteUrl =
 const distPath = process.env.SHELTER_DIST_PATH;
 
 let remoteBundle;
+let pendingBundleFetch;
 
 const fetchRemoteBundle = () => {
   return new Promise(resolve => {
     const req = https.get(remoteUrl);
   
     req.on("response", (res) => {
-      if (res.statusCode !== 200) resolve();
+      if (res.statusCode !== 200) {
+		pendingBundleFetch = null;
+		resolve();
+	  }
       const chunks = [];
   
       res.on("data", (chunk) => chunks.push(chunk));
@@ -35,6 +39,7 @@ const fetchRemoteBundle = () => {
   
         if (!data.includes("//# sourceMappingURL=")) data += `\n//# sourceMappingURL=${remoteUrl + ".map"}`;
           remoteBundle = data;
+		  pendingBundleFetch = null;
           resolve();
       });
     });
@@ -45,7 +50,7 @@ const fetchRemoteBundle = () => {
   })
 }
 
-if (!distPath) fetchRemoteBundle();
+if (!distPath) pendingBundleFetch = fetchRemoteBundle();
 
 const getShelterBundle = () => {
   if (distPath) {
@@ -98,9 +103,9 @@ const ProxiedBrowserWindow = new Proxy(electron.BrowserWindow, {
 		const window = new target(...args);
 		const origLoadURL = window.loadURL;
 		window.loadURL = async function(url) {
-			if (url.includes("discord.com/app") && !remoteBundle) {
-			// TODO: attach to initial promise if its still fetching 
-			await fetchRemoteBundle();
+			if (url.includes("discord.com/app") && !remoteBundle && !distPath) {
+			  pendingBundleFetch ??= fetchRemoteBundle();
+			  await pendingBundleFetch;
 		  }
 		  return await origLoadURL.apply(this, arguments);               
 		}
