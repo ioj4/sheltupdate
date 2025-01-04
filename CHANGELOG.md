@@ -1,3 +1,6 @@
+## r28
+ - wait for shelter bundle before starting the app
+
 ## r27
  - needed more luck
 
