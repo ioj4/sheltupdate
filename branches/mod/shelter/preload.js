@@ -48,14 +48,14 @@ ipcRenderer.invoke("SHELTER_BUNDLE_FETCH").then((bundle) => {
 
 let branches = {};
 
-const fetchAvailableBranches = () => ipcRenderer.invoke("SHELTER_AVAILABLE_BRANCHES");
+ipcRenderer.invoke("SHELTER_AVAILABLE_BRANCHES").then(b => branches = b);
 
 const readBranches = () => ipcRenderer.invoke("SHELTER_BRANCH_GET");
 
 const setBranches = (branches) => ipcRenderer.invoke("SHELTER_BRANCH_SET", branches);
 
 contextBridge.exposeInMainWorld("SheltupdateNative", {
-	getAllowedBranches: fetchAvailableBranches,
+	getAllowedBranches: () => Promise.resolve(branches),
 	getCurrentBranches: readBranches,
 
 	setBranches: async (br) => {
