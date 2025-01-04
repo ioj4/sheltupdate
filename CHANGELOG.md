@@ -1,3 +1,6 @@
+## r30
+ - fix branchesLoader manifest not including subdirs
+
 ## r29
  - improve bundle fetching
 
