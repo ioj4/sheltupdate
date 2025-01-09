@@ -17,7 +17,7 @@ jobs:
 
       - name: Extract version number
         run: |
-          VERSION=$(grep -oP -m 1 '(?<=## r)\d.*' CHANGELOG.md)
+          VERSION=$(grep -oP -m 1 '(?<=^## r)\d.*$' CHANGELOG.md)
           if [[ $VERSION = "" ]]; then
             echo "No version found in CHANGELOG.md"
             exit 1
