@@ -8,7 +8,7 @@ COPY pnpm-lock.yaml pnpm-lock.yaml
 
 RUN pnpm i --frozen-lockfile --prod
 
-FROM node:22-alpine
+FROM node:23-alpine
 
 COPY src src
 COPY branches branches
