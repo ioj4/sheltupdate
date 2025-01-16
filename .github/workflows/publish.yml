@@ -26,12 +26,14 @@ jobs:
 
       - name: Create Docker Image tags
         run: |
-          # Always build a dev image
           TAGS="ghcr.io/${{ github.repository }}:dev"
 
           if docker manifest inspect ghcr.io/${{ github.repository }}:0.0.$VERSION > /dev/null 2>&1; then
             echo "Image with version (0.0.$VERSION) already exists in registry"
+            echo "Publishing a dev image.."
           else
+            echo "Image with version (0.0.$VERSION) does not exist in the registry yet"
+            echo "Publishing a release and a dev image.."
             TAGS="${TAGS},\
               ghcr.io/${{ github.repository }}:0.0.${{ env.VERSION }},\
               ghcr.io/${{ github.repository }}:latest"
